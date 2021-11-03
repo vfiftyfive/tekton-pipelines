@@ -6,6 +6,16 @@ metadata:
   namespace: default
 spec:
   serviceAccountName: dockerhub-service
+  workspaces:
+    - name: ws
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: "ondat-tap"
+          resources:
+            requests:
+              storage: 1Gi
   params:
   - name: pathToKustomize
     value: 'overlay/prod'

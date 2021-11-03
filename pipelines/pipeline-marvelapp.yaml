@@ -3,6 +3,8 @@ kind: Pipeline
 metadata:
   name: marvel-app
 spec:
+  workspaces:
+    - name: ws
   params:
     - name: pathToKustomize
       description: path to the kustomize directory
@@ -26,6 +28,9 @@ spec:
       - name: builtImage
         resource: builtImage
   - name: kustomize-manifests
+    workspaces:
+      - name: manifest-ws
+        workspace: ws
     params:
       - name: pathToKustomize
         value: $(params.pathToKustomize)
