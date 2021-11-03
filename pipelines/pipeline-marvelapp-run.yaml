@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  creationTimestamp: null
+  generateName: marvel-app-run-
+  namespace: default
+spec:
+  serviceAccountName: dockerhub-service
+  params:
+  - name: pathToKustomize
+    value: 'overlay/prod'
+  pipelineRef:
+    name: marvel-app
+  resources:
+  - name: builtImage
+    resourceRef:
+      name: marvelapp-image
+  - name: docker-source
+    resourceRef:
+      name: marvelapp-repo
+  - name: manifest-source
+    resourceRef:
+      name: marvelapp-manifests
+status: {}

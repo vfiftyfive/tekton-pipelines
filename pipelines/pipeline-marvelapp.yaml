@@ -1,0 +1,39 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: marvel-app
+spec:
+  params:
+    - name: pathToKustomize
+      description: path to the kustomize directory
+  resources:
+    - name: docker-source
+      type: git
+    - name: builtImage
+      type: image
+    - name: manifest-source
+      type: git
+  tasks:
+  - name: build-app
+    params: 
+    taskRef:
+      name: build-docker-image-from-git-source
+    resources:
+      inputs:
+      - name: docker-source
+        resource: docker-source
+      outputs:
+      - name: builtImage
+        resource: builtImage
+  - name: kustomize-manifests
+    params:
+      - name: pathToKustomize
+        value: $(params.pathToKustomize)
+      - name: imageDigest
+        value: $(tasks.build-app.results.IMAGE-DIGEST)
+    taskRef:
+      name: kustomize
+    resources:
+      inputs:
+      - name: manifest-source
+        resource: manifest-source

@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  # The name of the task
+  name: kustomize
+spec:
+  params:
+    - name: pathToKustomize
+      description: path to the kustomize directory
+    - name: imageDigest
+      description: The image digest
+  resources:
+    inputs:
+    - name: manifest-source
+      type: git
+  steps:
+    - name: kustomize
+      image: quay.io/wpernath/kustomize-ubi:latest
+      workingDir: /workspace/$(resources.inputs.manifest-source.name)
+      script: |
+        echo $PWD
+        cd $(params.pathToKustomize)
+        kustomize edit set image vfiftyfive/marvelapp-cfd-demo=vfiftyfive/marvelapp-cfd-demo@$(params.imageDigest)
+        kustomize build . > ../../target/manifests.yaml
