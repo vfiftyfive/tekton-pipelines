@@ -22,5 +22,6 @@ spec:
       script: |
         echo $PWD
         cd $(params.pathToKustomize)
-        kustomize edit set image vfiftyfive/marvelapp-cfd-demo=vfiftyfive/marvelapp-cfd-demo@$(params.imageDigest)
+        kustomize edit set image vfiftyfive/flask_marvel=vfiftyfive/marvelapp-cfd-demo@$(params.imageDigest)
         kustomize build . > $(workspaces.manifest-ws.path)/manifests.yaml
+        

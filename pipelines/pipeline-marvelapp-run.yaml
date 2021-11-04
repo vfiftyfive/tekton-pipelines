@@ -16,9 +16,35 @@ spec:
           resources:
             requests:
               storage: 1Gi
+    - name: git-cli-source
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: "ondat-tap"
+          resources:
+            requests:
+              storage: 1Gi
+    - name: git-cli-basic-auth
+      secret:
+        secretName: git-basic-auth
   params:
   - name: pathToKustomize
     value: 'overlay/prod'
+  - name: GIT_USER_NAME
+    value: 'vfiftyfive'
+  - name: GIT_USER_EMAIL
+    value: 'vfiftyfive@gmail.com'
+  - name: GIT_SCRIPT
+    value: |
+          git init
+          git remote add origin https://github.com/vfiftyfive/CFD12-Demo-Manifests.git
+          git pull origin master
+          cd target
+          cp $(workspaces.input.path)/manifests.yaml .
+          git add manifests.yaml
+          git commit -m "Add manifests"
+          git push origin master
   pipelineRef:
     name: marvel-app
   resources:

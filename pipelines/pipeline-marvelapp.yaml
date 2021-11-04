@@ -5,9 +5,17 @@ metadata:
 spec:
   workspaces:
     - name: ws
+    - name: git-cli-source
+    - name: git-cli-basic-auth
   params:
     - name: pathToKustomize
       description: path to the kustomize directory
+    - name: GIT_USER_NAME
+      description: git user name
+    - name: GIT_USER_EMAIL
+      description: git user email
+    - name: GIT_SCRIPT
+      description: git commands to run
   resources:
     - name: docker-source
       type: git
@@ -17,7 +25,6 @@ spec:
       type: git
   tasks:
   - name: build-app
-    params: 
     taskRef:
       name: build-docker-image-from-git-source
     resources:
@@ -42,3 +49,25 @@ spec:
       inputs:
       - name: manifest-source
         resource: manifest-source
+    runAfter:
+      - build-app
+  - name: push-manifests
+    workspaces:
+      - name: source
+        workspace: git-cli-source
+      - name: input
+        workspace: ws
+      - name: basic-auth
+        workspace: git-cli-basic-auth
+    params:
+      - name: GIT_USER_NAME
+        value: $(params.GIT_USER_NAME)
+      - name: GIT_USER_EMAIL
+        value: $(params.GIT_USER_EMAIL)
+      - name: GIT_SCRIPT
+        value: $(params.GIT_SCRIPT)
+    taskRef:
+      name: git-cli
+    runAfter:
+      - kustomize-manifests
+        
