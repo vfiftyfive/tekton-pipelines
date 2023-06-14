@@ -12,7 +12,7 @@ spec:
         spec:
           accessModes:
             - ReadWriteOnce
-          storageClassName: "ondat-tap"
+          storageClassName: "ondat-dev"
           resources:
             requests:
               storage: 1Gi
@@ -21,7 +21,7 @@ spec:
         spec:
           accessModes:
             - ReadWriteOnce
-          storageClassName: "ondat-tap"
+          storageClassName: "ondat-dev"
           resources:
             requests:
               storage: 1Gi
