@@ -7,7 +7,7 @@ spec:
     - name: pathToDockerFile
       type: string
       description: The path to the dockerfile to build
-      default: $(resources.inputs.docker-source.path)/Dockerfile
+      default: $(resources.inputs.docker-source.path)/app/Dockerfile
     - name: pathToContext
       type: string
       description: |
